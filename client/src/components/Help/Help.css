@@ -1,0 +1,19 @@
+.search-input {
+  border: 1px solid;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: 30rem;
+  margin-top: 2rem;
+}
+
+.search-input:hover {
+  border-color: black;
+}
+
+.search-input-logo {
+  position: absolute;
+  font-size: 1.125rem;
+  right: 1.25rem;
+  top: 1.25rem;
+  opacity: 0.5;
+}
