@@ -1,6 +1,5 @@
-import React, { Children } from "react";
+import React from "react";
 import SliceBar from "../../components/SliceBar/SliceBar";
-import Footer from "../../components/Footer/Footer";
 
 const DefaultLayout = ({ children }) => {
   return (

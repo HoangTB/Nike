@@ -31,7 +31,7 @@ const Card = ({ options }) => {
                 style={{ width: "500px" }}
               />
               <div className="d-flex flex-column">
-                {e.new == 1 ? (
+                {e?.new === 1 ? (
                   <span className="text-warning">New Arrival</span>
                 ) : (
                   ""

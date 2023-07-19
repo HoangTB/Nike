@@ -41,11 +41,13 @@ const ProductManager = () => {
     idUpdate.current = id;
     const values = await ProductsServer.getProductById(id);
     setDataEdit(values);
+
     setIsLoadings(false);
   };
 
   const handleCreate = () => {
     setIsShowFormCreate(!isShowFormCreate);
+
     setIsLoadings(false);
   };
   return (

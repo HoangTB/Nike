@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import SliceBar from "../SliceBar/SliceBar";
 import "./UserManager.css";
 import { UserAPIServer } from "../../api/User";
 

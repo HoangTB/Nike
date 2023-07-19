@@ -1,16 +1,10 @@
-
-
 .shopping-cart {
 	padding: 100px 40px;
-
-
 }
 
 .shopping-cart.dark {
 	background-color: #f6f6f6;
 }
-
-
 
 .shopping-cart .block-heading {
 	padding-top: 50px;
@@ -60,9 +54,10 @@
 	font-size: 20px;
 
 }
-.product-name{
-		display: flex;
-		flex-direction: column;
+
+.product-name {
+	display: flex;
+	flex-direction: column;
 	gap: 10px;
 }
 
@@ -74,7 +69,7 @@
 
 .shopping-cart .items .product .info .product-name .product-info .value {
 	font-weight: 400;
-	
+
 }
 
 .shopping-cart .items .product .info .quantity .quantity-input {

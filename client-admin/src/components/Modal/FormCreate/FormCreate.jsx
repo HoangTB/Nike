@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import "./FormCreate.css";
+import "../FormUpdate/FormUpdate.css";
 import { ProductsServer } from "../../../api/Product";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { updateState } from "../../../store/UpdateProSlice";
+import Success from "../Success/Success";
 
 const FormCreate = ({ handleCreate, handleLoading }) => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const FormCreate = ({ handleCreate, handleLoading }) => {
   const [image3, setImage3] = useState("");
   const [image4, setImage4] = useState("");
   const [errors, setErrors] = useState({});
+  const [isShowSuccess, setIsShowSuccess] = useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -114,15 +116,20 @@ const FormCreate = ({ handleCreate, handleLoading }) => {
       } catch (error) {
         console.error(error);
       }
-
-      handleCreate();
+      setIsShowSuccess(true);
       dispatch(updateState());
       handleLoading();
     }
   };
 
+  const closeSuccess = () => {
+    setIsShowSuccess(false);
+    handleCreate();
+  };
+
   return (
     <div className="modal">
+      {isShowSuccess && <Success closeSuccess={closeSuccess} />}
       <div className="modal-null">
         <form className="form-create" onSubmit={handleFormSubmit}>
           <div className="form-create-form">
@@ -237,7 +244,7 @@ const FormCreate = ({ handleCreate, handleLoading }) => {
             </div>
           </div>
           <div className="modal-null-button">
-            <button type="submit">Create</button>{" "}
+            <button type="submit">Create</button>
             <button onClick={() => handleCreate()}>Cancel</button>
           </div>
         </form>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setSideBar } from "../../../store/getProductSlice";
 const Price = () => {
   const dispatch = useDispatch();

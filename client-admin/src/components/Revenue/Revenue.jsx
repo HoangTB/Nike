@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { HistoryAPIServer } from "../../api/History";
 import { useLocation } from "react-router-dom";
 
 const Revenue = () => {
   const [history, setHistory] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const location = useLocation();
-  const update = useSelector((status) => status.update);
 
   const handleChangeMonth = async (e) => {
     const dataMonth = e.target.value;

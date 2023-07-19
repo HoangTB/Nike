@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ContactUs from "./Help-Components/ContactUs";
 import HelpContainer from "./Help-Components/HelpContainer";
 import Search from "./Help-Components/Search";

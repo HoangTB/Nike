@@ -72,7 +72,7 @@ const Detail = () => {
 
       if (!selectSizes[0]) {
         setIsLoading(false);
-        toast.error("Please choose size !", {
+        toast.warn("Please choose size !", {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
@@ -87,7 +87,7 @@ const Detail = () => {
         const data = await OrderDetail.getOrderDetailById(user.id);
 
         const checkProduct = data.findIndex(
-          (item) => item.product_id == params.id
+          (item) => item.product_id === params.id
         );
 
         if (checkProduct !== -1) {

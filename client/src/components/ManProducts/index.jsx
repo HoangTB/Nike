@@ -5,12 +5,10 @@ import "./Products.css";
 import { Products } from "../../api/Product";
 import Loading from "../Loading/Loading";
 const ManProducts = ({ filteredOptions }) => {
-  const [cardData, setCardData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     Products.getProduct()
-      .then((data) => {
-        setCardData(data);
+      .then(() => {
         setIsLoading(false);
       })
       .catch(() => {

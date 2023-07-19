@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./FormUpdate.css";
-import { Link } from "react-router-dom";
-import { ProductsServer } from "../../../api/Product";
-import firebase from "firebase/app";
 import "firebase/storage";
 import { useDispatch } from "react-redux";
 import { updateState } from "../../../store/UpdateProSlice";
 import axios from "axios";
+import Success from "../Success/Success";
+
 const FormUpdate = ({ handleEdit, idUpdate, dataEdit, handleLoading }) => {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
@@ -21,6 +20,7 @@ const FormUpdate = ({ handleEdit, idUpdate, dataEdit, handleLoading }) => {
   const [image3, setImage3] = useState("");
   const [image4, setImage4] = useState("");
   const [errors, setErrors] = useState({});
+  const [isShowSuccess, setIsShowSuccess] = useState(false);
   useEffect(() => {
     if (dataEdit[0]) {
       setName(dataEdit[0].name);
@@ -124,14 +124,19 @@ const FormUpdate = ({ handleEdit, idUpdate, dataEdit, handleLoading }) => {
       } catch (error) {
         console.error(error);
       }
-
-      handleEdit();
+      setIsShowSuccess(true);
       dispatch(updateState());
       handleLoading();
     }
   };
+
+  const closeSuccess = () => {
+    setIsShowSuccess(false);
+    handleEdit();
+  };
   return (
     <div className="modal">
+      {isShowSuccess && <Success closeSuccess={closeSuccess} />}
       <div className="modal-null">
         <form className="form-create" onSubmit={handleFormSubmit}>
           <div className="form-create-form">

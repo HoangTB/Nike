@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./History.css";
 import { HistoryAPI } from "../../api/History";
 import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 const History = () => {
   const [dataHistory, setDataHistory] = useState([]);
 
-  const update = useSelector((state) => state.update);
   const location = useLocation();
 
   useEffect(() => {
@@ -14,7 +13,7 @@ const History = () => {
     HistoryAPI.getHistoryIdOrder(user.id).then((data) => {
       setDataHistory(data);
     });
-  }, []);
+  }, [location.pathname]);
 
   return (
     <div className="pb-5 form-history">
@@ -82,17 +81,15 @@ const History = () => {
                             <strong>{e.quantity}</strong>
                           </td>
                           <td className="border-0 align-middle">
-                            <a href="#" className="text-dark">
-                              <strong>
-                                {e.status === 2
-                                  ? "Processing"
-                                  : e.status === 3
-                                  ? "Out for Delivery"
-                                  : e.status === 4
-                                  ? "Delivered"
-                                  : "Pending"}
-                              </strong>
-                            </a>
+                            <strong>
+                              {e.status === 2
+                                ? "Processing"
+                                : e.status === 3
+                                ? "Out for Delivery"
+                                : e.status === 4
+                                ? "Delivered"
+                                : "Pending"}
+                            </strong>
                           </td>
                         </tr>
                       );

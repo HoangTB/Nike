@@ -14,7 +14,7 @@ const Header = () => {
         <div className="content-right">
           <ul>
             <li>
-              <a>Find a store</a>
+              <Link>Find a store</Link>
             </li>
             <li>
               <Link to="/help">Help</Link>

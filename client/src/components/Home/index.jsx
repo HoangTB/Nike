@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import MainPhoto from "./Home-Components/MainPhoto";
 import SliderMain from "./Home-Components/SliderMain";
 import Maintain from "./Home-Components/Maintain";
