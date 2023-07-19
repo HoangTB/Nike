@@ -5,13 +5,15 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { login } from "../../store/AdminSlice";
+import Loading from "../Loading/Loading";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("admin");
@@ -23,6 +25,7 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
 
     // Validate form inputs
@@ -30,14 +33,17 @@ const Login = () => {
     const errors = {};
 
     if (email.trim() === "") {
+      setIsLoading(false);
       isValid = false;
       errors.email = "Please enter your email";
     } else if (!validateEmail(email)) {
+      setIsLoading(false);
       isValid = false;
       errors.email = "Please enter a valid email";
     }
 
     if (password.trim() === "") {
+      setIsLoading(false);
       isValid = false;
       errors.password = "Please enter your password";
     }
@@ -46,9 +52,11 @@ const Login = () => {
 
     if (isValid) {
       const data = await dispatch(login({ email, password })).unwrap();
-      console.log(data);
+
       if (data.status === 200) {
+        setIsLoading(false);
         if (data.data.user.role === 2) {
+          setIsLoading(false);
           navigate("/home");
         } else {
           toast.info("This is not an administrator account", {
@@ -63,6 +71,7 @@ const Login = () => {
           });
         }
       } else {
+        setIsLoading(false);
         toast.error(data.response.data.message, {
           position: "top-right",
           autoClose: 1000,
@@ -79,6 +88,7 @@ const Login = () => {
 
   return (
     <div className="container forms">
+      {isLoading && <Loading />}
       <ToastContainer />
       <div className="form login" id="formSignIn">
         <div className="form-content">

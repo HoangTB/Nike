@@ -14,13 +14,19 @@ const orderRouter = require('./routers/order.router');
 const historyRouter = require('./routers/history.router');
 
 //Middleware
+const corsOrigin = ['https://nike-eta.vercel.app'];
 app.use(express.urlencoded()); // Biên dịch url
 app.use(bodyParser.json()); // Lấy Body
 app.use(morgan('dev')); // Logger error
 // app.use(helmet()); //
 app.use(cors()); // Chia sẻ tài nguyên giữa client and server
 //Database
-
+const corsOptions = {
+  origin: corsOrigin,
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 //doc static
 
 app.use(express.static(path.join(__dirname, '../../public')));

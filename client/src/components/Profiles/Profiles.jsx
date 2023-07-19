@@ -4,16 +4,71 @@ import { useState } from "react";
 import { UserAPI } from "../../api/User";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Profiles = () => {
   const [userData, setUserData] = useState([]);
   const location = useLocation();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const fetchUserData = async (userId) => {
+    try {
+      const response = await UserAPI.getUserId(userId);
+      setUserData(response.data[0]);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    UserAPI.getUserId(user.id).then((data) => setUserData(data.data[0]));
+    if (user) {
+      fetchUserData(user.id);
+    }
   }, [location.pathname]);
 
+  useEffect(() => {
+    setFirstName(userData.firstName);
+    setLastName(userData.lastName);
+    setBirthday(userData.birthday);
+  }, [userData]);
+
+  const handleUpdate = async (id) => {
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      birthday: birthday,
+    };
+    await UserAPI.updateUser(id, data)
+      .then(() => {
+        toast.success("Update Users Successfully !", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      })
+      .catch((error) => {
+        toast.error("Update User Error !", error, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      });
+  };
   return (
     <div className="mt-4 ">
+      <ToastContainer />
       <div className="container form-profile">
         <h1 className="mb-5">Account Settings</h1>
         <div className="bg-white rounded-lg d-block d-sm-flex">
@@ -54,7 +109,8 @@ const Profiles = () => {
                     <input
                       type="text"
                       className="form-control"
-                      defaultValue={userData.firstName}
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                     />
                   </div>
                 </div>
@@ -64,7 +120,8 @@ const Profiles = () => {
                     <input
                       type="text"
                       className="form-control"
-                      defaultValue={userData.lastName}
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                     />
                   </div>
                 </div>
@@ -74,7 +131,8 @@ const Profiles = () => {
                     <input
                       type="text"
                       className="form-control"
-                      defaultValue={userData.email}
+                      value={userData.email}
+                      disabled
                     />
                   </div>
                 </div>
@@ -84,15 +142,19 @@ const Profiles = () => {
                     <input
                       type="text"
                       className="form-control"
-                      defaultValue={
-                        userData.birthday && userData.birthday.slice(0, 10)
-                      }
+                      value={birthday && birthday.slice(0, 10)}
+                      onChange={(e) => setBirthday(e.target.value)}
                     />
                   </div>
                 </div>
               </div>
               <div>
-                <button className="btn btn-light">Update</button>{" "}
+                <button
+                  className="btn btn-light"
+                  onClick={() => handleUpdate(userData.id)}
+                >
+                  Update
+                </button>{" "}
                 <button className="btn btn-light">Cancel</button>
               </div>
             </div>

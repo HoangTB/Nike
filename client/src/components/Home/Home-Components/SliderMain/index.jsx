@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./SliderMain.css";
 import { Link } from "react-router-dom";
 import { Products } from "../../../../api/Product";
+
 const SliderMain = () => {
   const sliderRef = useRef();
   const settings = {
@@ -38,7 +39,9 @@ const SliderMain = () => {
   const [cardData, setCardData] = useState([]);
 
   useEffect(() => {
-    Products.getProduct().then((data) => setCardData(data));
+    Products.getProduct().then((data) => {
+      setCardData(data);
+    });
   }, []);
 
   return (

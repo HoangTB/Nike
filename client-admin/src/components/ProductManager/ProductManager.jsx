@@ -4,10 +4,12 @@ import { ProductsServer } from "../../api/Product";
 import ConfirmDelete from "../Modal/Confirm-Delete/Confirm-Delete";
 import FormUpdate from "../Modal/FormUpdate/FormUpdate";
 import FormCreate from "../Modal/FormCreate/FormCreate";
+import Loading from "../Loading/Loading";
 
 const ProductManager = () => {
   const [products, setProduct] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadings, setIsLoadings] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const idDelete = useRef();
   const idUpdate = useRef();
@@ -16,18 +18,22 @@ const ProductManager = () => {
   const [dataEdit, setDataEdit] = useState([]);
   useEffect(() => {
     ProductsServer.getProduct().then((product) => setProduct(product));
+    setIsLoadings(false);
   }, [isLoading]);
 
   const handleDeleteProduct = async (id) => {
     idDelete.current = id;
     setIsShow(!isShow);
+    setIsLoadings(false);
   };
 
   const handleCancel = () => {
     setIsShow(false);
+    setIsLoadings(false);
   };
   const handleLoading = (id) => {
     setIsLoading(!isLoading);
+    setIsLoadings(false);
   };
 
   const handleEdit = async (id) => {
@@ -35,13 +41,16 @@ const ProductManager = () => {
     idUpdate.current = id;
     const values = await ProductsServer.getProductById(id);
     setDataEdit(values);
+    setIsLoadings(false);
   };
 
   const handleCreate = () => {
     setIsShowFormCreate(!isShowFormCreate);
+    setIsLoadings(false);
   };
   return (
     <div className="content-user">
+      {isLoadings && <Loading />}
       {isShow && (
         <ConfirmDelete
           handleCancel={handleCancel}

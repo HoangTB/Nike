@@ -3,17 +3,20 @@ import "./Header.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateState } from "../../store/UpdateProSlice";
+import { UserAPI } from "../../api/User";
 const Header = () => {
   const location = useLocation();
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState([]);
   const [update, setUpdate] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  let userLocal = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    let userLocal = JSON.parse(localStorage.getItem("user"));
-    setUser(userLocal);
+    UserAPI.getUserId(Number(userLocal?.id))
+      .then((e) => setUser(e))
+      .catch((err) => console.log(err));
   }, [update, location.pathname]);
 
   const handleUserClick = () => {
@@ -46,10 +49,10 @@ const Header = () => {
             <li>
               <Link to="/help">Help</Link>
             </li>
-            {user ? (
+            {user?.data && user?.data[0] ? (
               <li>
                 <Link to="#">
-                  Hi {user.lastName} {user.firstName}
+                  Hi {user?.data[0]?.lastName} {user?.data[0]?.firstName}
                 </Link>
               </li>
             ) : (

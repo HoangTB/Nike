@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { updateState } from "../../store/UpdateProSlice";
 import Thanks from "../Modal/Thanks/Thanks";
 import { HistoryAPI } from "../../api/History";
+import { Products } from "../../api/Product";
 const Payment = () => {
   const [isShowForm, setIsShowForm] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -49,10 +50,10 @@ const Payment = () => {
     setErrors(errors);
     if (isValid) {
       OrderDetail.getOrderDetailById(user.id).then((dataDetail) => {
-        dataDetail?.map((e) => {
+        dataDetail?.map(async (e) => {
+          console.log(e.product_id);
           return Order.getOrderById(user.id)
-            .then((order) => {
-              console.log(order);
+            .then(async (order) => {
               let historyValue = {
                 quantity: e.quantity,
                 size_product: e.size_product,
@@ -66,6 +67,13 @@ const Payment = () => {
                 product_id: e.product_id,
               };
               HistoryAPI.createHistory(historyValue);
+              const product = await Products.getProductById(e.product_id);
+
+              let updateInventory = product[0].quantity_inventory - e.quantity;
+
+              Products.updateProduct(e.product_id, {
+                quantity_inventory: updateInventory,
+              });
             })
             .then(() => {
               // const updateInventory = {

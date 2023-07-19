@@ -9,6 +9,8 @@ import { Order } from "../../api/Order";
 import { useDispatch, useSelector } from "react-redux";
 import { updateState } from "../../store/UpdateProSlice";
 import { format } from "date-fns";
+import Loading from "../Loading/Loading";
+
 const Detail = () => {
   const location = useLocation();
   const [user, setUser] = useState("");
@@ -20,7 +22,7 @@ const Detail = () => {
   const today = new Date();
   const dataToday = format(today, "yyyy-MM-dd HH:mm:ss");
   const update = useSelector((state) => state.update);
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
   }, [location.pathname, update]);
@@ -40,6 +42,7 @@ const Detail = () => {
     });
   };
   const handleAddToCart = async () => {
+    setIsLoading(true);
     if (!user) {
       toast.error("Please Login !", {
         position: "top-right",
@@ -51,7 +54,12 @@ const Detail = () => {
         progress: undefined,
         theme: "light",
       });
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+      setIsLoading(false);
     } else {
+      setIsLoading(false);
       const user = JSON.parse(localStorage.getItem("user"));
       const orderValue = {
         order_date: dataToday,
@@ -61,8 +69,9 @@ const Detail = () => {
       Order.postOrder(orderValue);
 
       const orderResponse = await Order.getOrderById(user.id);
-      console.log("OK");
+
       if (!selectSizes[0]) {
+        setIsLoading(false);
         toast.error("Please choose size !", {
           position: "top-right",
           autoClose: 1000,
@@ -74,6 +83,7 @@ const Detail = () => {
           theme: "light",
         });
       } else {
+        setIsLoading(false);
         const data = await OrderDetail.getOrderDetailById(user.id);
 
         const checkProduct = data.findIndex(
@@ -81,22 +91,24 @@ const Detail = () => {
         );
 
         if (checkProduct !== -1) {
+          setIsLoading(false);
           const quantityValue = {
             quantity: data[checkProduct].quantity
               ? data[checkProduct].quantity + 1
               : 1,
             size_product: selectSizes[0],
           };
-          OrderDetail.updateQuantity(params.id, quantityValue);
+          OrderDetail.updateQuantity(params.id, quantityValue).then(() => {});
         } else {
+          setIsLoading(false);
           const orderDetailValue = {
             product_id: params.id,
             order_id: orderResponse[0].id,
             size_product: selectSizes[0],
           };
-          OrderDetail.postOrderDetail(orderDetailValue).then(() =>
-            dispatch(updateState())
-          );
+          OrderDetail.postOrderDetail(orderDetailValue).then(() => {
+            dispatch(updateState());
+          });
         }
       }
     }
@@ -105,6 +117,7 @@ const Detail = () => {
   return (
     <div className="container1 forms">
       <ToastContainer />
+      {isLoading && <Loading />}
       <div className="container">
         {products &&
           products.map((product) => {
@@ -270,10 +283,27 @@ const Detail = () => {
                         </td>
                       </tr>
                       <tr className="btn-list">
-                        <th colSpan={3} id="add-cart" className="btn-add-cart">
-                          <button onClick={handleAddToCart}>Add to Cart</button>{" "}
-                          <button>Favourite</button>
-                        </th>
+                        {product?.quantity_inventory < 0 ? (
+                          <th colSpan={3}>
+                            <p
+                              className=""
+                              style={{ textAlign: "center", color: "red" }}
+                            >
+                              The product is currently sold out.
+                            </p>
+                          </th>
+                        ) : (
+                          <th
+                            colSpan={3}
+                            id="add-cart"
+                            className="btn-add-cart"
+                          >
+                            <button onClick={handleAddToCart}>
+                              Add to Cart
+                            </button>{" "}
+                            <button>Favourite</button>
+                          </th>
+                        )}
                       </tr>
                     </tbody>
                   </table>
