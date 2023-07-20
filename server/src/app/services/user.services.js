@@ -64,7 +64,7 @@ const loginUser = async (data, res) => {
       }
     } else {
       // Nếu sai thì báo lỗi
-      res.status(401).json({ message: 'Email dont exist' });
+      res.status(401).json({ message: 'Email or password does not exist !' });
     }
   } catch (error) {
     res.status(404).json({ message: 'Not found' });

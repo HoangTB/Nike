@@ -61,7 +61,7 @@ const Header = () => {
               </li>
             )}
           </ul>
-          {userLocal ? (
+          {user?.data && user?.data[0] ? (
             <div className="user-dropdown">
               <i
                 className={"fa-solid fa-user fa-fade i-user "}
