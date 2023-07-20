@@ -53,30 +53,24 @@ const LoginForm = ({ setIsShow }) => {
 
     if (isValid) {
       const data = await dispatch(login({ email, password })).unwrap();
+      console.log(data);
       if (data.status === 200) {
+        navigate("/");
+      } else if (data.message === "Account has been locked") {
         setIsLoading(false);
-
-        // console.log(data.data.user.status);
-        if (data.data.user.status === 2) {
-          setIsLoading(false);
-
-          toast.warn("Account has been locked !", {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        } else {
-          navigate("/");
-        }
+        toast.warn("Account has been locked !", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       } else {
         setIsLoading(false);
-
-        toast.error(data.response.data.message, {
+        toast.error(data?.response?.data?.message, {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,

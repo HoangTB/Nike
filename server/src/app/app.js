@@ -14,7 +14,7 @@ const orderRouter = require('./routers/order.router');
 const historyRouter = require('./routers/history.router');
 
 //Middleware
-const corsOrigin = ['https://nike-eta.vercel.app'];
+const corsOrigin = ['https://nike-beta.vercel.app', 'https://nike-me4o.vercel.app'];
 app.use(express.urlencoded()); // Biên dịch url
 app.use(bodyParser.json()); // Lấy Body
 app.use(morgan('dev')); // Logger error
